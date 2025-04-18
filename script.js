@@ -1,11 +1,12 @@
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  databaseURL: "https://SEU_PROJETO.firebaseio.com",
-  projectId: "SEU_PROJETO",
-  storageBucket: "SEU_PROJETO.appspot.com",
-  messagingSenderId: "SEU_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyAXC8XI_Q8jM5MrTpboorCMqti5Yn-B7gI",
+  authDomain: "projeto-remediar.firebaseapp.com",
+  databaseURL: "https://projeto-remediar-default-rtdb.firebaseio.com",
+  projectId: "projeto-remediar",
+  storageBucket: "projeto-remediar.firebasestorage.app",
+  messagingSenderId: "624372151070",
+  appId: "1:624372151070:web:cfb199116b5d2c7dfb8f0f",
+  measurementId: "G-3D989EEEQ1"
 };
 
 firebase.initializeApp(firebaseConfig);
