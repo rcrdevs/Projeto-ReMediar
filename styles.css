@@ -1,15 +1,30 @@
+/* ESTILOS GERAIS */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: #f4f4f4;
 }
 
+/* HEADER */
 header {
   background: #4CAF50;
   color: #fff;
   padding: 15px 0;
   text-align: center;
   position: relative;
+  width: 100%;
+}
+header {
+  background: #4CAF50;
+  color: #fff;
+  padding: 15px 0;
+  text-align: center;
+  position: relative;
+  width: 100%;
 }
 
 .header-content {
@@ -19,6 +34,7 @@ header {
   position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .logo {
@@ -73,12 +89,14 @@ header {
 }
 
 .container {
+  width: 90%;
   max-width: 800px;
   margin: 20px auto;
   background: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  flex: 1;
 }
 
 nav {
@@ -150,13 +168,7 @@ nav button:hover {
 ul {
   list-style-type: none;
   padding: 0;
-}
-
-ul li {
-  padding: 8px;
-  margin-bottom: 5px;
-  background-color: #f9f9f9;
-  border-left: 4px solid #4CAF50;
+  margin: 0;
 }
 
 /* Estilos para os itens de evento */
@@ -215,7 +227,7 @@ ul li {
 
 .modal-content {
   background-color: #fefefe;
-  margin: 10% auto;
+  margin: 15% auto;
   padding: 20px;
   border-radius: 5px;
   width: 80%;
@@ -230,4 +242,19 @@ ul li {
 
 .cancel-btn:hover {
   background-color: #616161 !important;
+}
+
+/* Footer */
+footer {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  width: 100%;
+  margin-top: auto;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.9em;
 }
