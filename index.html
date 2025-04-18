@@ -14,9 +14,9 @@
         <p>Agenda Online para Idosos</p>
       </div>
       <div id="auth-buttons" class="auth-buttons">
-        <button id="login-btn" onclick="showScreen('login')">Login</button>
-        <button id="register-btn" onclick="showScreen('register')">Cadastro</button>
-        <button id="logout-btn" class="logout-btn" onclick="logout()">Sair</button>
+        <button id="login-btn">Login</button>
+        <button id="register-btn">Cadastro</button>
+        <button id="logout-btn" class="logout-btn">Sair</button>
       </div>
     </div>
     <div id="login-status"></div>
@@ -24,9 +24,9 @@
 
   <div class="container">
     <nav id="main-nav">
-      <button onclick="showScreen('home')">Tela Inicial</button>
-      <button onclick="showScreen('schedule')">Agendamento</button>
-      <button onclick="showScreen('history')">Histórico</button>
+      <button id="home-btn">Tela Inicial</button>
+      <button id="schedule-btn">Agendamento</button>
+      <button id="history-btn">Histórico</button>
     </nav>
 
     <!-- Telas -->
@@ -40,7 +40,7 @@
         <label for="login-password">Senha:</label>
         <input type="password" id="login-password" required>
       </div>
-      <button class="button" onclick="login()">Entrar</button>
+      <button class="button" id="login-submit">Entrar</button>
       <p id="login-error" class="error-message"></p>
     </div>
 
@@ -54,7 +54,7 @@
         <label for="register-password">Senha:</label>
         <input type="password" id="register-password" required minlength="6">
       </div>
-      <button class="button" onclick="register()">Cadastrar</button>
+      <button class="button" id="register-submit">Cadastrar</button>
       <p id="register-error" class="error-message"></p>
     </div>
 
@@ -86,7 +86,7 @@
         <label for="event-time">Horário:</label>
         <input type="time" id="event-time" required>
       </div>
-      <button class="button" onclick="addEvent()">Adicionar Evento</button>
+      <button class="button" id="add-event-btn">Adicionar Evento</button>
       <p id="event-error" class="error-message"></p>
     </div>
 
@@ -119,11 +119,15 @@
         <label for="edit-time">Horário:</label>
         <input type="time" id="edit-time" required>
       </div>
-      <button class="button" onclick="saveEdit()">Salvar</button>
-      <button class="button cancel-btn" onclick="closeModal()">Cancelar</button>
+      <button class="button" id="save-edit-btn">Salvar</button>
+      <button class="button cancel-btn" id="cancel-edit-btn">Cancelar</button>
       <p id="edit-error" class="error-message"></p>
     </div>
   </div>
+
+  <footer>
+    <p>ReMediar ver 3 - Desenvolvido por: Davi Ferreira, Franksney Gregorio e Ricardo Ruiz</p>
+  </footer>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
