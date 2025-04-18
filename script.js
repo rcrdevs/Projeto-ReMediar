@@ -1,4 +1,4 @@
-// Configuração e Inicialização do Firebase
+// Configuração do Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyAXC8XI_Q8jM5MrTpboorCMqti5Yn-B7gI",
   authDomain: "projeto-remediar.firebaseapp.com",
@@ -10,28 +10,29 @@ const firebaseConfig = {
   measurementId: "G-3D989EEEQ1"
 };
 
-// Verifica se o Firebase está carregado
-if (typeof firebase === 'undefined') {
-  document.body.innerHTML = '<div style="padding:20px;color:red;"><h1>Erro: Firebase não carregado.</h1><p>Recarregue a página ou verifique sua conexão.</p></div>';
-  throw new Error('Firebase não foi carregado corretamente');
-}
-
-// Inicializa o Firebase
+// Inicialização do Firebase
 let auth, db;
 try {
   const firebaseApp = firebase.initializeApp(firebaseConfig);
   auth = firebaseApp.auth();
   db = firebaseApp.database();
-  console.log("Firebase inicializado com sucesso!");
 } catch (error) {
   console.error("Erro ao inicializar Firebase:", error);
-  document.body.innerHTML = '<div style="padding:20px;color:red;"><h1>Erro de conexão</h1><p>Não foi possível conectar ao servidor.</p></div>';
+  alert("Erro ao conectar com o servidor");
 }
 
-// Variáveis globais
+// Variável para controle da edição
 let currentEditId = null;
 
-// Função para atualizar a interface
+// Função para mostrar telas
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+// Atualiza a interface conforme o estado de login
 function updateUI(user) {
   const loginBtn = document.getElementById('login-btn');
   const registerBtn = document.getElementById('register-btn');
@@ -45,7 +46,6 @@ function updateUI(user) {
     logoutBtn.style.display = 'inline-block';
     loginStatus.textContent = `Logado como: ${user.email}`;
     mainNav.style.display = 'block';
-    showScreen('home');
   } else {
     loginBtn.style.display = 'inline-block';
     registerBtn.style.display = 'inline-block';
@@ -56,40 +56,47 @@ function updateUI(user) {
   }
 }
 
-// Monitora estado de autenticação
+// Monitora o estado de autenticação
 auth.onAuthStateChanged(user => {
   if (user) {
     console.log("Usuário logado:", user.email);
     document.getElementById('user-email').textContent = `Bem-vindo(a), ${user.email}`;
     loadEvents(user.uid);
-    updateUI(user);
-  } else {
-    console.log("Nenhum usuário logado");
-    updateUI(null);
+    showScreen('home');
   }
+  updateUI(user);
 });
 
-// Funções de navegação
-function showScreen(id) {
-  const user = auth.currentUser;
-  const restrictedScreens = ['home', 'schedule', 'history'];
-  
-  if (restrictedScreens.includes(id) && !user) {
-    alert("Você precisa estar logado para acessar esta página");
-    return;
-  }
+// Configuração dos event listeners
+function setupEventListeners() {
+  // Navegação
+  document.getElementById('login-btn').addEventListener('click', () => showScreen('login'));
+  document.getElementById('register-btn').addEventListener('click', () => showScreen('register'));
+  document.getElementById('logout-btn').addEventListener('click', logout);
+  document.getElementById('home-btn').addEventListener('click', () => showScreen('home'));
+  document.getElementById('schedule-btn').addEventListener('click', () => showScreen('schedule'));
+  document.getElementById('history-btn').addEventListener('click', () => showScreen('history'));
 
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
-  document.getElementById(id).classList.add("active");
-  
-  document.querySelectorAll('.error-message').forEach(el => {
-    el.textContent = '';
+  // Autenticação
+  document.getElementById('login-submit').addEventListener('click', login);
+  document.getElementById('register-submit').addEventListener('click', register);
+
+  // Agendamentos
+  document.getElementById('add-event-btn').addEventListener('click', addEvent);
+
+  // Modal de edição
+  document.getElementById('save-edit-btn').addEventListener('click', saveEdit);
+  document.getElementById('cancel-edit-btn').addEventListener('click', closeModal);
+
+  // Fecha modal ao clicar fora
+  window.addEventListener('click', (event) => {
+    if (event.target === document.getElementById('edit-modal')) {
+      closeModal();
+    }
   });
 }
 
-// Funções de autenticação
+// Função de login
 function login() {
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value.trim();
@@ -117,6 +124,7 @@ function login() {
     });
 }
 
+// Função de cadastro
 function register() {
   const email = document.getElementById('register-email').value.trim();
   const password = document.getElementById('register-password').value.trim();
@@ -134,9 +142,9 @@ function register() {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(() => {
-      showScreen('login');
       document.getElementById('register-email').value = '';
       document.getElementById('register-password').value = '';
+      showScreen('login');
     })
     .catch(error => {
       let errorMessage = "Erro ao cadastrar: ";
@@ -150,13 +158,14 @@ function register() {
     });
 }
 
+// Função de logout
 function logout() {
   auth.signOut().catch(error => {
     alert("Erro ao sair: " + error.message);
   });
 }
 
-// Funções de agendamento
+// Adiciona um novo evento
 function addEvent() {
   const user = auth.currentUser;
   const errorElement = document.getElementById('event-error');
@@ -191,7 +200,7 @@ function addEvent() {
     });
 }
 
-// Funções de edição/exclusão
+// Abre o modal de edição
 function openEditModal(eventId, eventData) {
   currentEditId = eventId;
   document.getElementById('edit-type').value = eventData.type;
@@ -202,11 +211,13 @@ function openEditModal(eventId, eventData) {
   document.getElementById('edit-modal').style.display = 'block';
 }
 
+// Fecha o modal
 function closeModal() {
   document.getElementById('edit-modal').style.display = 'none';
   currentEditId = null;
 }
 
+// Salva as edições
 function saveEdit() {
   const user = auth.currentUser;
   if (!user || !currentEditId) return;
@@ -227,12 +238,14 @@ function saveEdit() {
   db.ref(`users/${user.uid}/events/${currentEditId}`).update(updatedEvent)
     .then(() => {
       closeModal();
+      loadEvents(user.uid);
     })
     .catch(error => {
       errorElement.textContent = "Erro ao atualizar: " + error.message;
     });
 }
 
+// Exclui um evento
 function deleteEvent(eventId) {
   if (!confirm("Tem certeza que deseja excluir este agendamento?")) return;
   
@@ -240,12 +253,15 @@ function deleteEvent(eventId) {
   if (!user) return;
 
   db.ref(`users/${user.uid}/events/${eventId}`).remove()
+    .then(() => {
+      loadEvents(user.uid);
+    })
     .catch(error => {
       alert("Erro ao excluir: " + error.message);
     });
 }
 
-// Carrega eventos
+// Carrega os eventos
 function loadEvents(uid) {
   const todayList = document.getElementById('today-list');
   const historyList = document.getElementById('history-list');
@@ -303,24 +319,23 @@ function loadEvents(uid) {
         }
       });
 
-      if (!hasTodayEvents) todayList.innerHTML = "<li>Nenhum evento hoje.</li>";
-      if (!hasHistoryEvents) historyList.innerHTML = "<li>Nenhum histórico.</li>";
+      if (!hasTodayEvents) {
+        todayList.innerHTML = "<li>Nenhum evento agendado para hoje.</li>";
+      }
+      if (!hasHistoryEvents) {
+        historyList.innerHTML = "<li>Nenhum evento no histórico.</li>";
+      }
     })
     .catch(error => {
-      todayList.innerHTML = "<li>Erro ao carregar.</li>";
-      historyList.innerHTML = "<li>Erro ao carregar.</li>";
+      console.error("Erro ao carregar eventos:", error);
+      todayList.innerHTML = "<li>Erro ao carregar eventos.</li>";
+      historyList.innerHTML = "<li>Erro ao carregar histórico.</li>";
     });
 }
 
-// Fecha modal ao clicar fora
-window.onclick = function(event) {
-  if (event.target == document.getElementById('edit-modal')) {
-    closeModal();
-  }
-};
-
-// Inicializa a aplicação
+// Inicializa a aplicação quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', () => {
+  setupEventListeners();
   if (!auth.currentUser) {
     showScreen('login');
   }
