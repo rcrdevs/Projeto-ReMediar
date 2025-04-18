@@ -8,44 +8,54 @@
 </head>
 <body>
   <header>
-    <h1>ReMediar</h1>
-    <p>Agenda Online para Idosos</p>
+    <div class="header-content">
+      <div class="logo">
+        <h1>ReMediar</h1>
+        <p>Agenda Online para Idosos</p>
+      </div>
+      <div id="auth-buttons" class="auth-buttons">
+        <button id="login-btn" onclick="showScreen('login')">Login</button>
+        <button id="register-btn" onclick="showScreen('register')">Cadastro</button>
+        <button id="logout-btn" class="logout-btn" onclick="logout()">Sair</button>
+      </div>
+    </div>
+    <div id="login-status"></div>
   </header>
 
   <div class="container">
-    <nav>
-      <button onclick="showScreen('login')">Login</button>
-      <button onclick="showScreen('register')">Cadastro</button>
+    <nav id="main-nav">
       <button onclick="showScreen('home')">Tela Inicial</button>
       <button onclick="showScreen('schedule')">Agendamento</button>
       <button onclick="showScreen('history')">Histórico</button>
     </nav>
 
-    <!-- Telas (mesmas da versão anterior) -->
-    <div id="login" class="screen active">
+    <!-- Telas -->
+    <div id="login" class="screen">
       <h2>Login</h2>
       <div class="form-group">
         <label for="login-email">E-mail:</label>
-        <input type="email" id="login-email">
+        <input type="email" id="login-email" required>
       </div>
       <div class="form-group">
         <label for="login-password">Senha:</label>
-        <input type="password" id="login-password">
+        <input type="password" id="login-password" required>
       </div>
       <button class="button" onclick="login()">Entrar</button>
+      <p id="login-error" class="error-message"></p>
     </div>
 
     <div id="register" class="screen">
       <h2>Cadastro</h2>
       <div class="form-group">
         <label for="register-email">E-mail:</label>
-        <input type="email" id="register-email">
+        <input type="email" id="register-email" required>
       </div>
       <div class="form-group">
         <label for="register-password">Senha:</label>
-        <input type="password" id="register-password">
+        <input type="password" id="register-password" required minlength="6">
       </div>
       <button class="button" onclick="register()">Cadastrar</button>
+      <p id="register-error" class="error-message"></p>
     </div>
 
     <div id="home" class="screen">
@@ -66,17 +76,18 @@
       </div>
       <div class="form-group">
         <label for="event-title">Título:</label>
-        <input type="text" id="event-title">
+        <input type="text" id="event-title" required>
       </div>
       <div class="form-group">
         <label for="event-date">Data:</label>
-        <input type="date" id="event-date">
+        <input type="date" id="event-date" required>
       </div>
       <div class="form-group">
         <label for="event-time">Horário:</label>
-        <input type="time" id="event-time">
+        <input type="time" id="event-time" required>
       </div>
       <button class="button" onclick="addEvent()">Adicionar Evento</button>
+      <p id="event-error" class="error-message"></p>
     </div>
 
     <div id="history" class="screen">
@@ -85,10 +96,39 @@
     </div>
   </div>
 
+  <!-- Modal de Edição -->
+  <div id="edit-modal" class="modal">
+    <div class="modal-content">
+      <h2>Editar Agendamento</h2>
+      <div class="form-group">
+        <label for="edit-type">Tipo:</label>
+        <select id="edit-type">
+          <option value="medicamento">Lembrete de Medicamento</option>
+          <option value="compromisso">Compromisso Médico</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="edit-title">Título:</label>
+        <input type="text" id="edit-title" required>
+      </div>
+      <div class="form-group">
+        <label for="edit-date">Data:</label>
+        <input type="date" id="edit-date" required>
+      </div>
+      <div class="form-group">
+        <label for="edit-time">Horário:</label>
+        <input type="time" id="edit-time" required>
+      </div>
+      <button class="button" onclick="saveEdit()">Salvar</button>
+      <button class="button cancel-btn" onclick="closeModal()">Cancelar</button>
+      <p id="edit-error" class="error-message"></p>
+    </div>
+  </div>
+
   <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <!-- Seu script -->
   <script src="script.js"></script>
