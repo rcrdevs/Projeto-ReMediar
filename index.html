@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ReMediar - Firebase</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>ReMediar</h1>
+    <p>Agenda Online para Idosos</p>
+  </header>
+
+  <div class="container">
+    <nav>
+      <button onclick="showScreen('login')">Login</button>
+      <button onclick="showScreen('register')">Cadastro</button>
+      <button onclick="showScreen('home')">Tela Inicial</button>
+      <button onclick="showScreen('schedule')">Agendamento</button>
+      <button onclick="showScreen('history')">Histórico</button>
+    </nav>
+
+    <!-- Telas (mesmas da versão anterior) -->
+    <div id="login" class="screen active">
+      <h2>Login</h2>
+      <div class="form-group">
+        <label for="login-email">E-mail:</label>
+        <input type="email" id="login-email">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Senha:</label>
+        <input type="password" id="login-password">
+      </div>
+      <button class="button" onclick="login()">Entrar</button>
+    </div>
+
+    <div id="register" class="screen">
+      <h2>Cadastro</h2>
+      <div class="form-group">
+        <label for="register-email">E-mail:</label>
+        <input type="email" id="register-email">
+      </div>
+      <div class="form-group">
+        <label for="register-password">Senha:</label>
+        <input type="password" id="register-password">
+      </div>
+      <button class="button" onclick="register()">Cadastrar</button>
+    </div>
+
+    <div id="home" class="screen">
+      <h2>Tela Inicial</h2>
+      <p id="user-email">Bem-vindo(a)!</p>
+      <h3>Compromissos e Lembretes do Dia</h3>
+      <ul id="today-list"></ul>
+    </div>
+
+    <div id="schedule" class="screen">
+      <h2>Agendar Compromisso / Lembrete</h2>
+      <div class="form-group">
+        <label for="event-type">Tipo:</label>
+        <select id="event-type">
+          <option value="medicamento">Lembrete de Medicamento</option>
+          <option value="compromisso">Compromisso Médico</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="event-title">Título:</label>
+        <input type="text" id="event-title">
+      </div>
+      <div class="form-group">
+        <label for="event-date">Data:</label>
+        <input type="date" id="event-date">
+      </div>
+      <div class="form-group">
+        <label for="event-time">Horário:</label>
+        <input type="time" id="event-time">
+      </div>
+      <button class="button" onclick="addEvent()">Adicionar Evento</button>
+    </div>
+
+    <div id="history" class="screen">
+      <h2>Histórico</h2>
+      <ul id="history-list"></ul>
+    </div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js"></script>
+
+  <!-- Seu script -->
+  <script src="script.js"></script>
+</body>
+</html>
